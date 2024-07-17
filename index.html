@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    
   
-    <link rel="stylesheet" href="/Users/dishashetty/Desktop/BudgetWise/BudgetWiseGit/BudgetWise.io/src/assets/main.css">
+    <link rel="stylesheet" href="/Users/dishashetty/Desktop/Budgetwise-assesment/BudgetWise/src/assets/main.css">
     <title>BudgetWise</title>
     <style>
 
@@ -49,7 +49,7 @@
       <div class="body">
         <div class="left-sidebar">
           <ul class= "sidebar">
-            <li><a  href="#" class="overview" @click="toggleOverview">Overview</a></li>
+            <li><a  href="#" class="overview" @click.prevent="toggleOverview">Overview</a></li>
             <li><a  href="#" class="budget">Budget</a></li>
             <li><a  href="#" class="transactions">Transactions</a></li>
             <li><a  href="#" class="trends">Trends</a></li>
@@ -90,17 +90,19 @@
                 <button @click="budgetRemove">Delete</button>
               </div>
             </div> -->
+            <div v-if="message" class="alert">
+              {{ message }}
+            </div>
 
-            <form class="popup-form">  
+            <form class="popup-form" @submit.prevent="budgetAdd">  
 
               <label for="category" >Category</label>
               <select v-model="budgetTitle.label" class="category1" id="category">
-                  <option value="Select a Category" disabled selected>Category</option>
+                  <option value="Select a Category" disabled selected>Select a Category</option>
                   <option value="Gas">Gas</option>
-                  <option value="Education">Education</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Food">Food</option>
-                  <option value="Business">Business</option>
+                  <option v-for="budget in budgetTitle" :key="budget.label" :value="budget.label">
+                    {{ budget.label }}
+                  </option>
               </select>
               
               <label for="amount">Amount</label>
@@ -315,121 +317,138 @@
     
 
   const { createApp, ref, computed } = Vue;
-    const app = createApp({
-      data : function(){
-        return{
-          showPopup: false,
-          logoImage: logoImage,
-            userImage: userImage,
-            bankImage: bankImage,
-          chart: null,
-          showOverview: false,
-          currentSection: 'home',
+const app = createApp({
+  data: function () {
+    return {
+      showPopup: false,
+      logoImage: logoImage,
+      userImage: userImage,
+      bankImage: bankImage,
+      chart: null,
+      showOverview: false,
+      currentSection: 'home',
       selectedMonth: '',
-      months: ['January 2023', 'February 2023', 'March 2023', 'April 2023',
-    'June 2023', 'July 2023', 'August 2023', 'September 2023', 'October 2023', 
-    'November 2023', 'December 2023'],
-          budgetTitle:[
-        { label: "Education", hex: 'rgb(83, 213, 228)', image: 'fa-solid fa-graduation-cap', spent: '40', total: '100'},
-        { label: "Entertaiment", hex: 'rgb(240, 151, 18)', image: 'fa-solid fa-ticket', spent: '10', total: '50'},
-        { label: "Food", hex: 'rgb(17, 6, 135)', image: 'fa-solid fa-utensils',spent: '65', total: '150' },
-        { label: "Groceries", hex: 'rgb(52, 196, 62)', image: 'fa-solid fa-bag-shopping',spent: '100', total: '200' },
-        { label: "Healthcare", hex: 'rgb(153, 25, 178)', image: 'fa-solid fa-notes-medical',spent: '100', total: '100' },
-        { label: "Housing", hex: 'rgb(222, 12, 23)', image: 'fa-solid fa-house',spent: '1750', total: '1750' },
-        { label: "Miscellaneous", hex: 'rgb(160, 111, 74)', image: 'fa-brands fa-microsoft',spent: '0', total: '50' },
-        { label: "Office", hex: 'rgb(213, 18, 164)', image: 'fa-solid fa-briefcase',spent: '0', total: '20' },
-        { label: "Pets", hex: 'rgb(109, 46, 6)', image: 'fa-solid fa-dog',spent: '0', total: '20' },
-        { label: "Shopping", hex: 'rgb(28, 66, 192)', image:'fa-solid fa-cart-shopping',spent: '20', total: '100' },
-        { label: "Subscriptions", hex: 'rgb(51, 103, 143)',image:'fa-solid fa-tv',spent: '35', total: '50' },
-        { label: "Transportation", hex: 'rgb(230, 216, 70)',image:'fa-solid fa-car', spent: '30', total: '100' },
-        { label: "Travel", hex: 'rgb(123, 95, 170)',image:'fa-solid fa-plane', spent: '50', total: '100' },
-        { label: "Utilities", hex: 'rgb(89, 148, 224)',image:'fa-solid fa-lightbulb', spent: '160', total: '300' },
+      months: [
+        'January 2023',
+        'February 2023',
+        'March 2023',
+        'April 2023',
+        'June 2023',
+        'July 2023',
+        'August 2023',
+        'September 2023',
+        'October 2023',
+        'November 2023',
+        'December 2023'
       ],
-
+      budgetTitle: [
+        { label: "Education", hex: 'rgb(83, 213, 228)', image: 'fa-solid fa-graduation-cap', spent: '40', total: '100' },
+        { label: "Entertaiment", hex: 'rgb(240, 151, 18)', image: 'fa-solid fa-ticket', spent: '10', total: '50' },
+        { label: "Food", hex: 'rgb(17, 6, 135)', image: 'fa-solid fa-utensils', spent: '65', total: '150' },
+        { label: "Groceries", hex: 'rgb(52, 196, 62)', image: 'fa-solid fa-bag-shopping', spent: '100', total: '200' },
+        { label: "Healthcare", hex: 'rgb(153, 25, 178)', image: 'fa-solid fa-notes-medical', spent: '100', total: '100' },
+        { label: "Housing", hex: 'rgb(222, 12, 23)', image: 'fa-solid fa-house', spent: '1750', total: '1750' },
+        { label: "Miscellaneous", hex: 'rgb(160, 111, 74)', image: 'fa-brands fa-microsoft', spent: '0', total: '50' },
+        { label: "Office", hex: 'rgb(213, 18, 164)', image: 'fa-solid fa-briefcase', spent: '0', total: '20' },
+        { label: "Pets", hex: 'rgb(109, 46, 6)', image: 'fa-solid fa-dog', spent: '0', total: '20' },
+        { label: "Shopping", hex: 'rgb(28, 66, 192)', image: 'fa-solid fa-cart-shopping', spent: '20', total: '100' },
+        { label: "Subscriptions", hex: 'rgb(51, 103, 143)', image: 'fa-solid fa-tv', spent: '35', total: '50' },
+        { label: "Transportation", hex: 'rgb(230, 216, 70)', image: 'fa-solid fa-car', spent: '30', total: '100' },
+        { label: "Travel", hex: 'rgb(123, 95, 170)', image: 'fa-solid fa-plane', spent: '50', total: '100' },
+        { label: "Utilities", hex: 'rgb(89, 148, 224)', image: 'fa-solid fa-lightbulb', spent: '160', total: '300' },
+      ],
       categories: {
-            Education: { image: 'fa-solid fa-graduation-cap', hex: 'rgb(83, 213, 228)' },
-            Entertainment: { image: 'fa-solid fa-ticket', hex: 'rgb(240, 151, 18)' },
-            Food: { image: 'fa-solid fa-utensils', hex: 'rgb(17, 6, 135)' },
-            Groceries: { image: 'fa-solid fa-bag-shopping', hex: 'rgb(52, 196, 62)' },
-            Healthcare: { image: 'fa-solid fa-notes-medical', hex: 'rgb(153, 25, 178)' },
-            Housing: { image: 'fa-solid fa-house', hex: 'rgb(222, 12, 23)' },
-            Miscellaneous: { image: 'fa-brands fa-microsoft', hex: 'rgb(160, 111, 74)' },
-            Office: { image: 'fa-solid fa-briefcase', hex: 'rgb(213, 18, 164)' },
-            Pets: { image: 'fa-solid fa-dog', hex: 'rgb(109, 46, 6)' },
-            Shopping: { image: 'fa-solid fa-cart-shopping', hex: 'rgb(28, 66, 192)' },
-            Subscriptions: { image: 'fa-solid fa-tv', hex: 'rgb(51, 103, 143)' },
-            Transportation: { image: 'fa-solid fa-car', hex: 'rgb(230, 216, 70)' },
-            Travel: { image: 'fa-solid fa-plane', hex: 'rgb(123, 95, 170)' },
-            Utilities: { image: 'fa-solid fa-lightbulb', hex: 'rgb(89, 148, 224)' },
-            Gas: { image: 'fa-solid fa-gas-pump', hex: 'rgb(8, 143, 143)' },
-          },
-
-      purchasedList:[
-      { label: "Cold Brew", hex: 'rgb(8, 29, 149)', image: 'https://budgetwise.co/img/gift.811ce353.svg', sublabel: 'Starbucks', cost: '5.92', date:'03-30-2022'},
-      { label: "Coursera", hex: 'rgb(83, 213, 228)', image: 'https://budgetwise.co/img/education.20df2648.svg', sublabel: 'Education', cost: '39.00', date:'03-12-2022'},
-      { label: "AppleTree", hex: 'rgb(52, 196, 62)', image: 'https://budgetwise.co/img/groceries.e667316a.svg', sublabel: 'Groceries', cost: '3.98', date:'03-03-2022'},
-      { label: "BKST-U-PENN", hex: 'rgb(32, 139, 215)', image: 'https://budgetwise.co/img/shopping.a541af7b.svg', sublabel: 'Shopping', cost: '49.89', date:'03-03-2022'},
-    ]
-      ,
-      options:{
+        Education: { image: 'fa-solid fa-graduation-cap', hex: 'rgb(83, 213, 228)' },
+        Entertainment: { image: 'fa-solid fa-ticket', hex: 'rgb(240, 151, 18)' },
+        Food: { image: 'fa-solid fa-utensils', hex: 'rgb(17, 6, 135)' },
+        Groceries: { image: 'fa-solid fa-bag-shopping', hex: 'rgb(52, 196, 62)' },
+        Healthcare: { image: 'fa-solid fa-notes-medical', hex: 'rgb(153, 25, 178)' },
+        Housing: { image: 'fa-solid fa-house', hex: 'rgb(222, 12, 23)' },
+        Miscellaneous: { image: 'fa-brands fa-microsoft', hex: 'rgb(160, 111, 74)' },
+        Office: { image: 'fa-solid fa-briefcase', hex: 'rgb(213, 18, 164)' },
+        Pets: { image: 'fa-solid fa-dog', hex: 'rgb(109, 46, 6)' },
+        Shopping: { image: 'fa-solid fa-cart-shopping', hex: 'rgb(28, 66, 192)' },
+        Subscriptions: { image: 'fa-solid fa-tv', hex: 'rgb(51, 103, 143)' },
+        Transportation: { image: 'fa-solid fa-car', hex: 'rgb(230, 216, 70)' },
+        Travel: { image: 'fa-solid fa-plane', hex: 'rgb(123, 95, 170)' },
+        Utilities: { image: 'fa-solid fa-lightbulb', hex: 'rgb(89, 148, 224)' },
+        Gas: { image: 'fa-solid fa-gas-pump', hex: 'rgb(8, 143, 143)' },
+      },
+      purchasedList: [
+        { label: "Cold Brew", hex: 'rgb(8, 29, 149)', image: 'https://budgetwise.co/img/gift.811ce353.svg', sublabel: 'Starbucks', cost: '5.92', date: '03-30-2022' },
+        { label: "Coursera", hex: 'rgb(83, 213, 228)', image: 'https://budgetwise.co/img/education.20df2648.svg', sublabel: 'Education', cost: '39.00', date: '03-12-2022' },
+        { label: "AppleTree", hex: 'rgb(52, 196, 62)', image: 'https://budgetwise.co/img/groceries.e667316a.svg', sublabel: 'Groceries', cost: '3.98', date: '03-03-2022' },
+        { label: "BKST-U-PENN", hex: 'rgb(32, 139, 215)', image: 'https://budgetwise.co/img/shopping.a541af7b.svg', sublabel: 'Shopping', cost: '49.89', date: '03-03-2022' },
+      ],
+      options: {
         animationEnabled: true,
-        title:{
-		  text: "Vue.js Basic Column Chart"
+        title: {
+          text: "Vue.js Basic Column Chart"
         },
         data: [{
           type: "column",
           dataPoints: [
-            { label: "apple",  y: 10 },
+            { label: "apple", y: 10 },
             { label: "orange", y: 15 },
             { label: "banana", y: 25 },
-            { label: "mango",  y: 30 },
-            { label: "grape",  y: 28 }
+            { label: "mango", y: 30 },
+            { label: "grape", y: 28 }
           ]
         }]
-      }
-        };
       },
-      methods: {
-      toggleSection(section) {
+      message: '' // New data property for displaying messages
+    };
+  },
+  methods: {
+    toggleSection(section) {
       this.currentSection = section;
     },
     closePopup() {
       this.showPopup = false;
     },
-      showPopUp() {
+    showPopUp() {
       this.showPopup = true;
     },
     hidePopUp() {
       this.showPopup = false;
     },
-        budgetAdd() {
-      
-      const category = this.categories[this.budgetTitle.label];    
-      const newBudgetData = {
-        label: this.budgetTitle.label,
-        hex: category.hex,
-        image: category.image,  
-        spent: this.budgetTitle.spent,
-        total: this.budgetTitle.total
-      };
-      this.budgetTitle.push(newBudgetData);
-      localStorage.setItem('budgetCategories', JSON.stringify(this.budgetTitle));
+    budgetAdd() {
+      const existingCategory = this.budgetTitle.find(
+        (budget) => budget.label.toLowerCase() === this.budgetTitle.label.toLowerCase()
+      );
 
-      this.budgetTitle.label = "";
-      this.budgetTitle.spent = "";
-      this.budgetTitle.total = "";
+      if (existingCategory) {
+        this.message = `${this.budgetTitle.label} category already exists.`;
+      } else {
+        const category = this.categories[this.budgetTitle.label];
+        const newBudgetData = {
+          label: this.budgetTitle.label,
+          hex: category.hex,
+          image: category.image,
+          spent: this.budgetTitle.spent,
+          total: this.budgetTitle.total
+        };
+        this.budgetTitle.push(newBudgetData);
+        localStorage.setItem('budgetCategories', JSON.stringify(this.budgetTitle));
+
+        this.message = `${this.budgetTitle.label} category added successfully.`;
+
+        // Clear input fields
+        this.budgetTitle.label = "";
+        this.budgetTitle.spent = "";
+        this.budgetTitle.total = "";
+      }
     },
+  },
 
-  }, 
-  
-  
   created() {
     const savedCategories = localStorage.getItem('budgetCategories');
     if (savedCategories) {
       this.budgetTitle = JSON.parse(savedCategories);
     }
   },
-})
+});
+
     //Chart.js
 
 
