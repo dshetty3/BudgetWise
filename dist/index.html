@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+  
+    
+    <title>BudgetWise</title>
+    <style>
+
+      [v-cloak]{
+        display: none;
+      }
+
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+
+    
+    <script type="module" crossorigin src="/assets/index-6f647fa0.js"></script>
+    <link rel="stylesheet" href="/assets/index-a4fd6f72.css">
+  </head>
+  <body>
+    <div id="app" v-cloak>
+
+      <div class = "navbar">
+        <div class = "budgetwise-logo">
+          
+          <img :src="logoImage" style= "width:30px; height:30px;" alt="user-img">
+            <span> BudgetWise </span>
+        </div>
+        <ul class="nav">
+          <a href="#" class="home">Home</a>
+          <a href="#" class="community">Community</a>
+          <a href="#" class="faqs">FAQs</a>
+        </ul>
+        <button class="account">
+          <img :src="userImage" style= "width:30px; height:30px;" alt="user-img">
+          <span class="user-name">John Doe</span>
+          <i class="fa-solid fa-angle-down"></i>  
+        </button>
+      </div>
+
+      <div class="body">
+        <div class="left-sidebar">
+          <ul class= "sidebar">
+            <li><a  href="#" class="overview" @click="toggleOverview">Overview</a></li>
+            <li><a  href="#" class="budget">Budget</a></li>
+            <li><a  href="#" class="transactions">Transactions</a></li>
+            <li><a  href="#" class="trends">Trends</a></li>
+            <li><a  href="#" class="savings">Savings Goals</a></li>
+            <li><a  href="#" class="alerts">Alerts</a></li>
+          </ul>
+        </div>
+
+        
+      
+        <div id="main-panel">
+          <div class="situational-budget">
+            Monthly Budget <i class="fa-solid fa-angle-down" style="padding: 9px;"></i>
+           
+            <i class="fa-solid fa-share-nodes"></i>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+            &nbsp; &nbsp;
+          <a class="addbutton" href="#popup1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 73" fill="none">
+                <circle cx="28" cy="37" r="28" fill="#6970C9"></circle>
+                <path d="M25.3539 47.75V25.25H30.7039V47.75H25.3539ZM16.5039 39V34H39.5539V39H16.5039Z" fill="white"></path>
+              </svg>
+          </a>
+          </div>
+
+          <div id="popup1" class="overlay">
+            <div class="popup">
+              <input v-model="budgetTitle.label" placeholder="Category Label">&nbsp;
+              <input v-model="budgetTitle.spent" placeholder="Spent">
+              <input v-model="budgetTitle.total" placeholder="Total"><br>
+              <button @click="budgetAdd">Add</button>&nbsp;
+              <button @click="budgetRemove">Delete</button>
+            </div>
+          </div>
+
+ 
+          
+        <select v-model="selectedMonth" class= month>
+        <option value="" disabled selected>Month</option>
+        <option v-for="month in months" :value="month">{{ month }}
+        </option>
+        </select>
+              
+  
+          <h2 class="category">
+            Categories
+          </h2>
+
+          <div class="category-scrollview" v-if="selectedMonth === 'April 2023'" >
+            <div class="category-card" v-for="item in budgetTitle" style="cursor: pointer;">
+              <div class="minimal-info" >
+              
+              <div class="left">
+              <div class="icon">
+              <div style="position: relative; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+              <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+                <div id="middle-circle">
+                  <i :class="item.image" style="color:#fff"></i>
+                </div>
+                <div id="progress-spinner" :style="{'background-color': item.hex}">
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="info"><div id="title"><span>{{item.label}}</span></div>
+                <div class="additional"><span>Spent 
+                  <span class="amount" style="color: #53bd71">${{item.spent}}
+              </span> of ${{item.total}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <span id="amount">${{item.total - item.spent}}</span>
+          <span id="green">left</span>
+        </div>
+      </div>
+
+        <div class="transactions">
+        <br>
+          <div id="myProgress">
+            <div id="myBar" v-bind:style="{ width : ((item.spent/item.total)*100) + '%', backgroundColor: item.hex}"></div>
+          </div>
+       </div>
+      </div>
+    </div>
+  
+    </div>
+
+    <div id="rhs"  >
+    <div class="active-budget-card">
+      <div class="stats">
+        <div class="total"> Spent 
+          <div id="budget-amount" style="color:rgb(229, 16, 16); font-size: 25px">$800</div>
+        </div>
+        <div class="divider"></div>
+        <div class="middle"> Available 
+          <div id="budget-amount" style="color:#31cd3e; font-size: 25px">$1200</div>
+        </div>
+        <div class="divider"></div>
+        <div class="right1"> Budget 
+          <div id="budget-amount" style="color:rgb(2, 8, 3); font-size: 25px">$2000</div>
+        </div>
+      </div>
+      <div class="box-progress-bar">
+        <span class="box-progress" style="width: 40%"></span>
+      </div>
+    </div>
+
+    <br> 
+    <div class = "recent"> 6 Month Snapshot </div>
+    <br>
+    <div class="graph"> 
+      <canvas id="myChart" style="height:400px;"></canvas>
+    </div>
+    
+    <br>
+    <div class="recent">
+      <div class="recent-transactions">Recent Transactions</div>
+      <div class="see-all">See all</div>
+      <br><br>
+    </div>
+    <div class="view">
+    <div class="purchased-card" v-for="list in purchasedList" style="cursor: pointer;">
+          <div class="minimal-info">
+            <div class="left">
+              <div class="icon">
+                <div style="position: relative;display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                  <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+                    <div id="middle-circle1">
+                    <img :src="list.image">
+                      
+                    </div>
+                    <div id="progress-spinner" :style="{'background-color': list.hex}">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="info">
+                <div id="title">
+                  <span>{{list.label}}</span>
+                </div>
+                <div class="additional">
+                  {{list.sublabel}}
+                </div>
+              </div>
+            </div>
+            <div class="right" style= "white-space: nowrap;">
+              <span id="amount" style="color: rgb(3, 6, 8);">${{list.cost}}</span>
+              <span id="date">{{list.date}}</span>
+            </div>
+            <div class="right2">
+            <i class="fa-solid fa-angle-right" style= "margin-right: -20px;"></i>
+          </div>
+          </div>
+          
+        </div></div>
+
+        
+        <br>
+        <div class="recent"> Bank & Credit Cards </div>
+        <br>
+        <div class="purchased-card" style="cursor: pointer;">
+          <div class="minimal-info">
+            <div class="left">
+              <div class="icon">
+                <div style="position: relative; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                  <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+                    
+                      <img :src="bankImage" id= "bank" alt="BOA"/>
+                    </div>
+                  </div>
+              </div>
+              <div class="info">
+                <div id="title">
+                  <span>Bank of America</span>
+                </div>
+                <div class="additional">...4765</div>
+              </div>
+            </div>
+            <div class="right">
+              <span id="amount" style="color: #6970c9;">Balance</span>
+              <span id="date" style="color: #6970c9;">$1,326.23</span>
+             
+            </div>
+            <i class="fa-solid fa-angle-up" style= "margin-right: -20px;"></i>
+          </div>
+        </div>
+
+        <br>
+        <div class = "recent"> Savings Goals 
+          <div class="see-all"><span style="font-size: 3rem;">&#43;</span></div>
+        </div>
+       
+        <div class="graph1"> 
+          <div class="trip"> Italy Trip
+            <div class="see-all1" style="color: rgb(105, 112, 201); margin-left: 600px; margin-top: -30px; font-size: 1.2rem;">See details
+            </div>
+          </div>
+          <br>
+          
+         
+          <canvas id="myDoughnutChart"></canvas>
+          
+          <div id="additionalText" class="additional-text"></div>
+          <div id="additionalText1" class="additional-text1"></div>
+          </div>
+</div>
+</div>
+
+  
+     
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.30/vue.global.min.js"></script>
+
+ 
+  </script>
+ 
+
+</body>
+</html>
