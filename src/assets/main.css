@@ -105,7 +105,7 @@
 /*chart*/
 .active-budget-card {
   width: 100%;
-  max-width: 500px;
+  //max-width: 500px;
   //height: 30%;
   padding: 32px 40px;
   border: 0.01px solid #000;
@@ -136,7 +136,7 @@
 }
 
 .trip{
-  margin-left: -20rem;
+  margin-left: -30rem;
   margin-top: -1rem;
   font-size: 1.5rem;
 }
@@ -341,16 +341,45 @@ cursor: pointer;
   font-size: 20px;
   line-height: 1;
   color: #53bd71;
-  border-radius: 15px;
-  border: 1px solid #53bd71;
+  border-radius: 8px;
+  border: 1px solid #9DD7AB;
   background: #e6f5ea;
   padding: 8px;
-  width: 170px;
+  width: 175px;
   height: 45px;
-  bottom: 10px;
-  text-align: center;
-  letter-spacing: -1px;
+  text-align: left;
+  
 }
+
+.month {
+  margin-left: -430px;
+  font-weight: 700;
+  font-family: Outfit;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+  color: #53bd71;
+  border-radius: 8px;
+  border: 1px solid #9DD7AB;
+  background: #e6f5ea;
+  padding: 8px;
+  width: 175px;
+  height: 45px;
+  text-align: left;
+}
+
+
+.dropdown-arrow {
+  width: 0;
+  height: 0;
+  border-top: 5px solid black;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+
+
+
 
 .category{
   margin-left: -450px;
@@ -370,14 +399,13 @@ cursor: pointer;
 
 .category-card {
  
-  display: flex;
-  flex-direction: column;
-  
-  box-shadow: 0 1px 1px rgba(0,0,0,.25);
- 
-  width: 200%;
-  max-width: 600px;
-  padding: 10px 5px;
+  //display: flex;
+  //flex-direction: column;
+  box-shadow: 0 1px 1px rgba(221,221,221,1);
+  //width: 200%;
+  width: 600px;
+  height: 84px;
+  padding: 12px 0px 12px 0px;
 }
 
 .category-scrollview::-webkit-scrollbar {
@@ -450,7 +478,7 @@ cursor: pointer;
   line-height: 135%;
   width: 100%;
   text-align: left;
-  letter-spacing: -1px;
+  //letter-spacing: -1px;
   white-space: nowrap;
 }
 
@@ -492,20 +520,22 @@ cursor: pointer;
 }
 
 #myBar {
-  height: 5px;
   text-align: center;
   line-height: 30px;
   color: white;
+  height: 6px;
+  margin-top:-10px
 }
 
 .addbutton{
     all: unset;
     cursor: pointer;
     display: flex;
-    margin: -0.6rem;
+    margin: -0.8rem;
     width: 80px;
     height: 50px;
     float: right;
+    margin-left: 1rem;
 }
 .fa-share-nodes{
   float: right;
@@ -645,8 +675,8 @@ cursor: pointer;
 }
 
 .see-all {
-  margin-right: -65px; /* Add margin for spacing */
-  cursor: pointer; /* Add cursor style for interaction */
+  margin-right: -65px; 
+  cursor: pointer; 
 }
 
 .transaction{
@@ -717,7 +747,7 @@ cursor: pointer;
 
 
 .popup-form {
-  max-width: 400px; /* Adjust width as needed */
+  max-width: 400px; 
   margin: 0 auto;
 }
 
@@ -732,7 +762,7 @@ input.category1 {
   font-size: 16px;
 }
 
-/* CSS for select dropdown */
+
 select.category1 {
   width: 100%;
   padding: 10px;
@@ -743,7 +773,7 @@ select.category1 {
   font-size: 16px;
 }
 
-/* CSS for buttons */
+
 button {
   padding: 10px 20px;
   margin: 10px 5px;
