@@ -169,7 +169,7 @@
         </div>
 
         <div class="right">
-          <span id="amount">${{item.total - item.spent}}</span>
+          <span id="amount" style="color: #53bd71">${{item.total - item.spent}}</span>
           <span id="green">left</span>
         </div>
       </div>
@@ -471,8 +471,6 @@ const app = createApp({
 });
 
     //Chart.js
-
-
     document.addEventListener("DOMContentLoaded", function () {
     var ctx = document.getElementById("myChart").getContext("2d");
     var ctxDoughnut = document.getElementById("myDoughnutChart").getContext("2d");

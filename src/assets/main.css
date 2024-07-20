@@ -20,6 +20,7 @@
       padding: 0 32px;
       background-color: #fff;
       box-shadow: 0 2px 4px rgba(0,0,0,.4);
+      height: 48px;
     }
 
     .budgetwise-logo {
@@ -156,6 +157,7 @@
   position: relative;
   .right{
     margin-right: -90px;
+    text-align: right;
   }
 }
 
@@ -427,6 +429,7 @@ cursor: pointer;
 .left {
   display: flex;
   gap: 10px;
+  width: 40%;
   
 }
 
@@ -471,7 +474,7 @@ cursor: pointer;
   align-items: center;
   display: flex;
     flex-direction: column;
-    gap: 5px
+    gap: 5px;
 }
 
 #amount,#title {
@@ -484,6 +487,7 @@ cursor: pointer;
   text-align: left;
   //letter-spacing: -1px;
   white-space: nowrap;
+  //color: rgb(83, 189, 113)
 }
 
 .additional {
@@ -645,10 +649,11 @@ cursor: pointer;
     height: 100%;
     position: relative;
     box-sizing: border-box;
-    padding: 0;
+  
     flex-direction: column;
     width: 30%;
     margin-right: 40px;
+    max-width: 110%;
 
 }
 
