@@ -1,7 +1,7 @@
 # BudgetWise.io
 
 # vue-project
-This assesment is only for Divercity.io - this is a test
+This assesment is only for Divercity.io - this is a test - part 2
 
 
 ## Recommended IDE Setup
